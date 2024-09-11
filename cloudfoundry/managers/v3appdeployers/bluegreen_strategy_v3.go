@@ -138,7 +138,10 @@ func (s BlueGreen) Deploy(appDeploy AppDeploy) (AppDeployResponse, error) {
 		},
 		{
 			Forward: func(ctx Context) (Context, error) {
-				return ctx, SafeAppDeletion(*s.client, appDeploy.App.GUID, 5)
+				if err := SafeAppDeletion(*s.client, appDeploy.App.GUID, 5); err != nil {
+					fmt.Printf("Deletion of venerable app '%s' (guid: '%s') failed with error: %s", appDeploy.App.Name, appDeploy.App.GUID, err.Error())
+				}
+				return ctx, nil
 			},
 		},
 	}
@@ -293,7 +296,10 @@ func (s BlueGreen) Restage(appDeploy AppDeploy) (AppDeployResponse, error) {
 		},
 		{
 			Forward: func(ctx Context) (Context, error) {
-				return ctx, SafeAppDeletion(*s.client, appDeploy.App.GUID, 5)
+				if err := SafeAppDeletion(*s.client, appDeploy.App.GUID, 5); err != nil {
+					fmt.Printf("Deletion of venerable app '%s' (guid: '%s') failed with error: %s", appDeploy.App.Name, appDeploy.App.GUID, err.Error())
+				}
+				return ctx, nil
 			},
 		},
 	}
